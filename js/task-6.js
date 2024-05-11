@@ -9,17 +9,13 @@ const createButton = document.querySelector("[data-create]");
 const destroyButton = document.querySelector("[data-destroy]");
 const boxesDiv = document.querySelector("div#boxes");
 
-function destroyBoxes () {
-  const previousBoxes = document.querySelectorAll(".superBox");
-  previousBoxes.forEach((previousBox) => {
-    previousBox.remove();
-  });
-
-
+function destroyBoxes() {
+  boxesDiv.innerHTML = "";
 }
 
 function createBoxes(amount) {
-  destroyBoxes ();
+  const newBoxes = [];
+
   let boxSize = 20;
   for (let i = 1; i <= amount; i++) {
     let newBox = document.createElement("div");
@@ -28,20 +24,26 @@ function createBoxes(amount) {
     newBox.style.width = boxSize + "px";
     newBox.style.height = boxSize + "px";
     newBox.style.backgroundColor = getRandomHexColor();
-    boxesDiv.append(newBox);
+    newBoxes.push(newBox);
   }
+  return newBoxes;
 }
 
 createButton.addEventListener("click", () => {
   const value = parseInt(inputField.value);
   if (value >= 1 && value <= 100) {
+    destroyBoxes();
     const amount = value;
-    createBoxes(amount);
+    const newBoxes = createBoxes(amount);
+    boxesDiv.append(...newBoxes);
+  } else {
+    console.log(
+      "It is impossible to create this number of boxes. Please enter a number between 1 and 100."
+    );
   }
-
   inputField.value = "";
 });
 
 destroyButton.addEventListener("click", () => {
-  destroyBoxes ();
+  destroyBoxes();
 });
